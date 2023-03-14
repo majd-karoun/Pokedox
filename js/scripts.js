@@ -1,6 +1,3 @@
-let body = $('.body'
-)
-
 let pokemonList = [
   {
     name: "Dragon",
@@ -21,19 +18,18 @@ let pokemonList = [
 
 // loop over Pokemon List
 for (let i = 0; i < pokemonList.length; i++) {
-  // check if pokemon is Tiger
+
   let pokemon = pokemonList[i].name
-  if (pokemon.name=== "Dragon") {
-    document.write(
-      `${pokemon.name} (height ${
-        pokemon.name
-      }) ${"Wow, that's fast!"}`
-    );
-  } else {
-    document.write(`${pokemonList[i].name} (height ${pokemonList[i].height})`);
+  let pokemonHeight = pokemonList[i].height
+   
+  // check if pokemon is Dragon
+  if (pokemon=== "Dragon") {
+    document.write(pokemon + '(height' + pokemonHeight +')'+ ' that is huge!'
+    )
+  } 
+  
+  else {
+    document.write(pokemon + '(height' + pokemonHeight +')');
   }
-  let typesElement = $(
-    '<p>' + '<strong>' + 'Type/s: ' + '</strong>' + '</p>'
-  )
  
 }
