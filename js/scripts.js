@@ -24,7 +24,10 @@ let pokemonRepository = (function(){
   }
 
   function add(item){
-    return pokemonList.push(item)
+    if (typeof item === 'object'){
+      return pokemonList.push(item)
+    }
+    
   }
 
   return{
@@ -48,3 +51,4 @@ pokemonRepository.getAll().forEach(item => {
     document.write(pokemon + "(height" + pokemonHeight + ")" + '<br>');
   }
 })
+
