@@ -16,20 +16,17 @@ let pokemonList = [
   },
 ];
 
-// loop over Pokemon List
-for (let i = 0; i < pokemonList.length; i++) {
 
-  let pokemon = pokemonList[i].name
-  let pokemonHeight = pokemonList[i].height
-   
-  // check if pokemon is Dragon
-  if (pokemon=== "Dragon") {
-    document.write(pokemon + '(height' + pokemonHeight +')'+ ' that is huge!'
-    )
-  } 
-  
-  else {
-    document.write(pokemon + '(height' + pokemonHeight +')');
+
+pokemonList.forEach(item => {
+  let pokemon = item.name;
+  let pokemonHeight = item.height;
+   // check if pokemon is Dragon
+   if (pokemon === "Dragon") {
+    document.write(
+      pokemon + "(height" + pokemonHeight + ")" + " That is huge!" + '<br>'
+    );
+  } else {
+    document.write(pokemon + "(height" + pokemonHeight + ")" + '<br>');
   }
- 
-}
+})
