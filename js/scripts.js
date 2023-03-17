@@ -1,6 +1,4 @@
-
-
-let pokemonRepository = (function(){
+let pokemonRepository = (function () {
   let pokemonList = [
     {
       name: "Dragon",
@@ -19,36 +17,56 @@ let pokemonRepository = (function(){
     },
   ];
 
-  function getAll(){
-    return pokemonList
+  function getAll() {
+    return pokemonList;
   }
 
-  function add(item){
-    if (typeof item === 'object'){
-      return pokemonList.push(item)
+  function add(pokemon) {
+    if (typeof pokemon === "object" && "name" in pokemon && "height" in pokemon && "type" in pokemon) {
+      return pokemonList.push(pokemon);
     }
-    
   }
 
-  return{
+  // create a pokemon button and add it to .pokemon-list
+  function addListItem(pokemon) {
+    // set and select variables
+    let pokemonName = pokemon.name;
+    let pokemonHeight = pokemon.height;
+    let li = document.createElement("li");
+    let pokemonList = document.querySelector(".pokemon-list");
+    let button = document.createElement("button");
+
+    //render the pokemon names
+    button.innerText = pokemonName;
+    button.classList.add("pokemon-label");
+    pokemonList.appendChild(li);
+    li.appendChild(button);
+
+    // event listener
+    button.addEventListener('click',()=> showDetails(pokemon))
+  }
+
+  function showDetails(pokemon){
+    console.log(pokemon);
+  }
   
+  return {
     getAll,
-    add
-  }
+    add,
+    addListItem
+  };
+})();
+//////////////////////////////////////////////
 
-}())
+
+// add to pokemon to the repository
+pokemonRepository.add({ name: "Pikachu", height: 0.3, types: ["electric"] });
+////////////////////////////////////////////
 
 
-pokemonRepository.getAll().forEach(item => {
-  let pokemon = item.name;
-  let pokemonHeight = item.height;
-   // check if pokemon is Dragon
-   if (pokemon === "Dragon") {
-    document.write(
-      pokemon + "(height" + pokemonHeight + ")" + " That is huge!" + '<br>'
-    );
-  } else {
-    document.write(pokemon + "(height" + pokemonHeight + ")" + '<br>');
-  }
-})
+// iterate through and render the pokemon list
+pokemonRepository.getAll().forEach((pokemon) => {
+  pokemonRepository.addListItem(pokemon)
+});
+//////////////////////////////////////////////////////////
 
