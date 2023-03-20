@@ -38,9 +38,7 @@ button:hover {
   background-color: rgb(208, 175, 30);
 }
 
-ul {
-  list-style: none;
-}
+
 
 /*/////////////////////////////*/
 .pokemon-list {
@@ -51,6 +49,7 @@ ul {
   padding: 10px;
   justify-content: space-around;
   list-style: none;
+  text-align: center;
 }
 
 .pokemon-list li {
