@@ -7,12 +7,7 @@ let pokemonRepository = (function () {
     return pokemonList;
   }
 
-  // add a pokemon object to the repository
-  function add(pokemon) {
-    if (typeof pokemon === "object" && "name" in pokemon) {
-      return pokemonList.push(pokemon);
-    }
-  }
+ 
 
   function showLoadingMessage() {
     let message = document.createElement("h1");
@@ -35,27 +30,26 @@ let pokemonRepository = (function () {
     let pokemonName = pokemon.name.toUpperCase();
     let pokemonHeight = pokemon.height;
     let li = document.createElement("li");
+    li.classList.add('list-group-item',"bg-warning");
     let pokemonList = document.querySelector(".pokemon-list");
     let button = document.createElement("button");
+    button.setAttribute("data-toggle", "modal");
+    button.setAttribute("data-target", "#exampleModal");
     //generate the pokemon name
     button.innerText = pokemonName;
-    button.classList.add("pokemon-label");
+    button.classList.add("pokemon-label", 'btn');
     pokemonList.appendChild(li);
     li.appendChild(button);
     // event listener to show details on button click
     button.addEventListener("click", () => showDetails(pokemon));
   }
 
-  //show more details about the pokemon
-  function showDetails(pokemon) {
-    
-    showLoadingMessage;
-    loadDetails(pokemon).then(function () {
-      hideLoadingMessage();
-      console.log(pokemon)
-      showModal(pokemon.name.toUpperCase(),`Height: ${pokemon.height}` , pokemon.imageUrl);
-    });
+ // add a pokemon object to the repository
+ function add(pokemon) {
+  if (typeof pokemon === "object" && "name" in pokemon) {
+    return pokemonList.push(pokemon);
   }
+}
 
   // fetch pokemon names and urls and add them to the repository
   function loadList() {
@@ -97,6 +91,17 @@ let pokemonRepository = (function () {
       });
   }
 
+    //show more details about the pokemon
+    function showDetails(pokemon) {
+    
+      showLoadingMessage;
+      loadDetails(pokemon).then(function () {
+        hideLoadingMessage();
+        console.log(pokemon)
+        showModal(pokemon);
+      });
+    }
+
   return {
     getAll,
     add,
@@ -120,62 +125,34 @@ pokemonRepository
   });
 //////////////////////////////////////////////////////////
 
-function showModal(title, text, image) {
-  let modalContainer = document.querySelector('#modal-container');
-  modalContainer.addEventListener('click', (e) => {
-  // Since this is also triggered when clicking INSIDE the modal
-  // We only want to close if the user clicks directly on the overlay
-  let target = e.target;
-  if (target === modalContainer) {
-    hideModal();
-  }
-});
+function showModal(item) {
+  let modalBody = document.querySelector(".modal-body");
+  let modalTitle = document.querySelector(".modal-title");
+  let modalHeader = document.querySelector(".modal-header");
 
-  // Clear all existing modal content
-  modalContainer.innerHTML = '';
+  modalTitle.innerHTML = "";
+  modalBody.innerHTML = "";
 
-  let modal = document.createElement('div');
-  modal.classList.add('modal');
+  //creating an elements for the modal content
+  let nameElement = document.createElement("h3");
+  nameElement.textContent = item.name;
 
-  // Add the new modal content
-  let closeButtonElement = document.createElement('button');
-  closeButtonElement.classList.add('modal-close');
-  closeButtonElement.innerText = 'X';
- closeButtonElement.addEventListener('click', hideModal);
+  let imageElement = document.createElement("img");
+  imageElement.setAttribute("class", "modal-img");
+  imageElement.setAttribute("style", "width:50%");
+  imageElement.setAttribute("src", item.imageUrl);
 
+  let heightElement = document.createElement("p");
+  heightElement.textContent = "height: " + item.height;
 
-  let titleElement = document.createElement('h2');
-  titleElement.innerText = title;
+  let typesElement = document.createElement("p");
+  typesElement.textContent =
+    "types: " + item.types.map((type) => type.type.name).join(", ");
 
-  let contentElement = document.createElement('h3');
-  contentElement.innerText = text;
-
-  let imageElement = document.createElement('img');
-  imageElement.setAttribute("src", image);
-
-  modal.appendChild(closeButtonElement);
-  modal.appendChild(titleElement);
-  modal.appendChild(contentElement);
-  modal.appendChild(imageElement);
-  modalContainer.appendChild(modal);
-
-
-
-  modalContainer.classList.add('is-visible');
+  modalTitle.appendChild(nameElement);
+  modalBody.appendChild(imageElement);
+  modalBody.appendChild(heightElement);
+  modalBody.appendChild(typesElement);
 }
 
-function hideModal() {
-  let modalContainer = document.querySelector('#modal-container');
-  modalContainer.classList.remove('is-visible');
-}
 
-document.querySelector('#show-modal').addEventListener('click', () => {
-  showModal('Modal title', 'This is the modal content!');
-});
-
-window.addEventListener('keydown', (e) => {
-  let modalContainer = document.querySelector('#modal-container');
-  if (e.key === 'Escape' && modalContainer.classList.contains('is-visible')) {
-    hideModal();  
-  }
-});
