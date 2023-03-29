@@ -1,14 +1,36 @@
 let pokemonRepository = (function () {
   let pokemonList = [];
   let apiUrl = "https://pokeapi.co/api/v2/pokemon/?limit=150";
+  let searchInput = document.querySelector("#search-input");
 
   // return all pokemons in the repository
   function getAll() {
     return pokemonList;
   }
 
- 
+  // search for a pokemon
+  searchInput.addEventListener("input", function () {
+    pokemonRepository.filterSearch(searchInput);
+  });
 
+  function filterSearch(searchInput) {
+    let filterValue = searchInput.value.toLowerCase();
+  
+    // filter the pokemonList array based on the filterValue
+    let filteredPokemon = pokemonList.filter(function (pokemon) {
+      return pokemon.name.toLowerCase().indexOf(filterValue) > -1;
+    });
+  
+    // update the displayed list of Pokemon based on the filtered results
+    let pokemonListElement = document.querySelector(".pokemon-list");
+    pokemonListElement.innerHTML = "";
+    filteredPokemon.forEach(function (pokemon) {
+      pokemonRepository.addListItem(pokemon);
+    });
+  }
+  
+
+  // show a loading message
   function showLoadingMessage() {
     let message = document.createElement("h1");
     message.classList.add("loading-message");
@@ -30,26 +52,26 @@ let pokemonRepository = (function () {
     let pokemonName = pokemon.name.toUpperCase();
     let pokemonHeight = pokemon.height;
     let li = document.createElement("li");
-    li.classList.add('list-group-item',"bg-warning");
+    li.classList.add("list-group-item", "bg-warning");
     let pokemonList = document.querySelector(".pokemon-list");
     let button = document.createElement("button");
     button.setAttribute("data-toggle", "modal");
     button.setAttribute("data-target", "#exampleModal");
     //generate the pokemon name
     button.innerText = pokemonName;
-    button.classList.add("pokemon-label", 'btn');
+    button.classList.add("pokemon-label", "btn");
     pokemonList.appendChild(li);
     li.appendChild(button);
     // event listener to show details on button click
     button.addEventListener("click", () => showDetails(pokemon));
   }
 
- // add a pokemon object to the repository
- function add(pokemon) {
-  if (typeof pokemon === "object" && "name" in pokemon) {
-    return pokemonList.push(pokemon);
+  // add a pokemon object to the repository
+  function add(pokemon) {
+    if (typeof pokemon === "object" && "name" in pokemon) {
+      return pokemonList.push(pokemon);
+    }
   }
-}
 
   // fetch pokemon names and urls and add them to the repository
   function loadList() {
@@ -73,6 +95,8 @@ let pokemonRepository = (function () {
         console.error(e);
       });
   }
+
+
   //fetch more details about each pokemon
   function loadDetails(item) {
     let url = item.detailsUrl;
@@ -94,13 +118,13 @@ let pokemonRepository = (function () {
     //show more details about the pokemon
     function showDetails(pokemon) {
     
-      showLoadingMessage;
       loadDetails(pokemon).then(function () {
-        hideLoadingMessage();
-        console.log(pokemon)
         showModal(pokemon);
       });
     }
+  
+
+  
 
   return {
     getAll,
@@ -108,6 +132,7 @@ let pokemonRepository = (function () {
     addListItem,
     loadList,
     loadDetails,
+    filterSearch,
   };
 })();
 //////////////////////////////////////////////
@@ -135,17 +160,17 @@ function showModal(item) {
 
   //creating an elements for the modal content
   let nameElement = document.createElement("h3");
-  nameElement.textContent = item.name;
+  nameElement.textContent = item.name.toUpperCase();
 
   let imageElement = document.createElement("img");
   imageElement.setAttribute("class", "modal-img");
   imageElement.setAttribute("style", "width:50%");
   imageElement.setAttribute("src", item.imageUrl);
 
-  let heightElement = document.createElement("p");
+  let heightElement = document.createElement("h3");
   heightElement.textContent = "height: " + item.height;
 
-  let typesElement = document.createElement("p");
+  let typesElement = document.createElement("h3");
   typesElement.textContent =
     "types: " + item.types.map((type) => type.type.name).join(", ");
 
@@ -154,5 +179,3 @@ function showModal(item) {
   modalBody.appendChild(heightElement);
   modalBody.appendChild(typesElement);
 }
-
-
