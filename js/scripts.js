@@ -1,4 +1,5 @@
 let pokemonRepository = (function () {
+  
   let pokemonList = [];
   let apiUrl = "https://pokeapi.co/api/v2/pokemon/?limit=150";
   let searchInput = document.querySelector("#search-input");
@@ -48,22 +49,28 @@ let pokemonRepository = (function () {
 
   // turns passed pokemon into a button and add it to the dom
   function addListItem(pokemon) {
-    // set and select variables
-    let pokemonName = pokemon.name.toUpperCase();
-    let pokemonHeight = pokemon.height;
-    let li = document.createElement("li");
-    li.classList.add("list-group-item", "bg-warning");
-    let pokemonList = document.querySelector(".pokemon-list");
-    let button = document.createElement("button");
-    button.setAttribute("data-toggle", "modal");
-    button.setAttribute("data-target", "#exampleModal");
-    //generate the pokemon name
-    button.innerText = pokemonName;
-    button.classList.add("pokemon-label", "btn");
-    pokemonList.appendChild(li);
-    li.appendChild(button);
-    // event listener to show details on button click
-    button.addEventListener("click", () => showDetails(pokemon));
+    loadDetails(pokemon).then(function () { // load details before creating the button
+      // set and select variables
+      let pokemonName = pokemon.name.toUpperCase();
+      let pokemonHeight = pokemon.height;
+      let li = document.createElement("li");
+      li.classList.add("card")
+      let pokemonList = document.querySelector(".pokemon-list");
+      let image = document.createElement("img");
+      image.setAttribute("src", pokemon.imageUrl); // set the image source to the Pokemon's image URL
+      image.classList.add("pokemon-image"); // add a class for styling the image
+      let button = document.createElement("button");
+      button.setAttribute("data-toggle", "modal");
+      button.setAttribute("data-target", "#exampleModal");
+      // generate the pokemon name
+      button.innerText = pokemonName;
+      button.classList.add("pokemon-label", "btn");
+      pokemonList.appendChild(li);
+      li.appendChild(image); // add the image to the list item
+      li.appendChild(button);
+      // event listener to show details on button click
+      button.addEventListener("click", () => showDetails(pokemon));
+    });
   }
 
   // add a pokemon object to the repository
@@ -81,13 +88,21 @@ let pokemonRepository = (function () {
         return response.json();
       })
       .then(function (json) {
-        json.results.forEach(function (item) {
+        let pokemonPromises = json.results.map(function (item) {
           let pokemon = {
             name: item.name,
             detailsUrl: item.url,
           };
-          hideLoadingMessage();
-          add(pokemon);
+          return loadDetails(pokemon); // return a promise that resolves with the modified Pokemon object
+        });
+        return Promise.all(pokemonPromises); // wait for all promises to resolve before continuing
+      })
+      .then(function (pokemonList) {
+        console.log(pokemonList);
+        hideLoadingMessage();
+        pokemonList.forEach(function (pokemon) {
+          pokemonRepository.add(pokemon); // add the modified Pokemon object to the repository
+          pokemonRepository.addListItem(pokemon); // create the list item with the modified Pokemon object
         });
       })
       .catch(function (e) {
@@ -95,7 +110,6 @@ let pokemonRepository = (function () {
         console.error(e);
       });
   }
-
 
   //fetch more details about each pokemon
   function loadDetails(item) {
@@ -106,9 +120,14 @@ let pokemonRepository = (function () {
       })
       .then(function (details) {
         // Now we add the details to the item
+        console.log(details)
         item.imageUrl = details.sprites.front_default;
         item.height = details.height;
         item.types = details.types;
+        item.abilities = details.abilities;
+        item.experience = details.base_experience;
+        item.experience = details.base_experience;
+        return item; // return the modified Pokemon object
       })
       .catch(function (e) {
         console.error(e);
@@ -160,7 +179,7 @@ function showModal(item) {
 
   //creating an elements for the modal content
   let nameElement = document.createElement("h3");
-  nameElement.textContent = item.name.toUpperCase();
+  nameElement.textContent = item.name.toUpperCase() ;
 
   let imageElement = document.createElement("img");
   imageElement.setAttribute("class", "modal-img");
@@ -170,12 +189,24 @@ function showModal(item) {
   let heightElement = document.createElement("h3");
   heightElement.textContent = "height: " + item.height;
 
+  let experienceElement = document.createElement("h3");
+  experienceElement.textContent = "experience: " + item.experience;
+  
   let typesElement = document.createElement("h3");
   typesElement.textContent =
     "types: " + item.types.map((type) => type.type.name).join(", ");
 
+  
+  let abilitiesElement = document.createElement("h3");
+  abilitiesElement.textContent =
+    "abilities: " + item.abilities.map((ability) => ability.ability.name).join(", ");
+
+  
+
   modalTitle.appendChild(nameElement);
   modalBody.appendChild(imageElement);
+  modalBody.appendChild(experienceElement);
   modalBody.appendChild(heightElement);
   modalBody.appendChild(typesElement);
+  modalBody.appendChild(abilitiesElement);
 }

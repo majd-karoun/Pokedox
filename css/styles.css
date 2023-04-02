@@ -1,5 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
 
 * {
   margin: 0;
@@ -8,8 +8,8 @@
 }
 
 body {
-  font-family: "Lato", sans-serif;
-  background-color: rgb(208, 175, 30);
+  font-family: "VT323", monospace;
+  background-color: #f9dc5c;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,27 +18,49 @@ body {
 
 h1 {
   text-align: center;
-
   margin-top: 30px;
-  color: rgb(200, 42, 42);
+  color: #d53d1e;
   font-family: "Press Start 2P", cursive;
+  font-size: 3rem;
+  text-shadow: 2px 2px #3f3f3f;
 }
 
 .btn {
   cursor: pointer;
   font-family: inherit;
-  color: rgba(136, 0, 0, 0.941);
-
+  color: #ffffff;
+  background-color: #d53d1e;
   padding: 0.5rem 2rem;
   width: 200px;
   font-weight: 700;
   font-size: 1.3rem;
   border-radius: 5px;
   border: none;
+  text-shadow: 2px 2px #3f3f3f;
+  transition: transform 0.1s ease-in-out;
 }
-button:hover {
-  transform: scale(1.1);
-  background-color: rgb(208, 175, 30);
+.btn:hover {
+  transform: scale(1.05);
+  background-color: #266996;
+  color: #d53d1e;
+}
+
+.x-btn{
+  font-size: 40px;
+  
+}
+
+.logo{
+  width: 20%;
+  padding-block: 20px;
+}
+nav{
+  background-color: red;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+
 }
 
 /*/////////////////////////////*/
@@ -46,16 +68,16 @@ button:hover {
   margin-top: 30px;
   display: flex;
   flex-wrap: wrap;
-  background-color: rgb(200, 42, 42);
-  width: 90%;
-  padding: 30px;
-  border-radius: 20px;
+  flex-direction: row;
+ width: 80%;
+  
   justify-content: space-around;
   list-style: none;
-  text-align: center;
+  
+
 }
 .pokemon-list li {
-  flex: 0 0 30%;
+
   margin-bottom: 20px;
 }
 
@@ -94,12 +116,29 @@ button:hover {
   text-align: left;
   border-radius: 10px;
   text-align: center;
+  background-color: #ffffff;
+  box-shadow: 2px 2px #3f3f3f;
 }
 
 #search-input {
-  border-radius: 5px;
-  border: solid;
-  padding-inline: 10px;
-  background-color: transparent;
+  color: rgb(84, 120, 212);
   width: 300px;
+  height: 40px;
+  border-radius: 15px;
+  border: none;
+  outline: none;
+  padding: 10px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  background-color: #d0b951;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+#search-input:focus {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+}
+
+.card{
+  background-color: transparent;
 }
