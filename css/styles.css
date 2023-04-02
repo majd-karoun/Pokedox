@@ -85,6 +85,7 @@ nav{
 #modal-container {
   display: none;
 }
+
 #modal-container.is-visible {
   position: fixed;
   padding: 20px;

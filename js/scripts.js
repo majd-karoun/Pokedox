@@ -122,6 +122,7 @@ let pokemonRepository = (function () {
         // Now we add the details to the item
         console.log(details)
         item.imageUrl = details.sprites.front_default;
+        item.imageBackUrl = details.sprites.back_default;
         item.height = details.height;
         item.types = details.types;
         item.abilities = details.abilities;
@@ -185,6 +186,11 @@ function showModal(item) {
   imageElement.setAttribute("class", "modal-img");
   imageElement.setAttribute("style", "width:50%");
   imageElement.setAttribute("src", item.imageUrl);
+  
+  let imageBackElement = document.createElement("img");
+  imageBackElement.setAttribute("class", "modal-img");
+  imageBackElement.setAttribute("style", "width:50%");
+  imageBackElement.setAttribute("src", item.imageBackUrl);
 
   let heightElement = document.createElement("h3");
   heightElement.textContent = "height: " + item.height;
@@ -205,6 +211,7 @@ function showModal(item) {
 
   modalTitle.appendChild(nameElement);
   modalBody.appendChild(imageElement);
+  modalBody.appendChild(imageBackElement);
   modalBody.appendChild(experienceElement);
   modalBody.appendChild(heightElement);
   modalBody.appendChild(typesElement);
